@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+
+import os
+from launch import LaunchDescription
+from launch_ros.actions import Node
+from ament_index_python.packages import get_package_share_directory
+
+def generate_launch_description():
+
+    this_directory = get_package_share_directory('kuka_torque_control')
+    
+    urdf = os.path.join(this_directory, 'urdf/iiwa14.urdf')
+
+    # Node: Trajectory Tracking Server
+    trajectory_tracking = Node(
+        package    = 'serial_link_action_server',
+        executable = 'trajectory_tracking_server',
+        name       = 'trajectory_tracking_server',
+        output     = 'screen',
+        parameters = [os.path.join(this_directory, 'config/control_parameters.yaml')],
+        arguments  = [urdf,                                                                         # URDF location
+                     'link7',                                                                       # Endpoint name
+                     'joint_command_relay',                                                         # Topic to publish joint commands to
+                     'joint_states',                                                                # Joint state topic to subscribe to
+                     'TORQUE']
+    )   
+
+    # Node: Joint Command Relay
+    relay = Node(
+        package    = 'kuka_torque_control',
+        executable = 'joint_command_relay',
+        name       = 'joint_command_relay',
+        output     = 'screen',
+        arguments  = ['joint_command_relay',                                                        # Node name
+                      'joint_command_relay',                                                        # Subscribe topic
+                      'joint_commands']                                                             # Publish topic
+    )
+    
+    # Robot State Publisher
+    model = Node(
+        package    = 'robot_state_publisher',
+        executable = 'robot_state_publisher',
+        name       = 'robot_state_publisher',
+        output     = 'screen',
+        parameters = [{'robot_description': open(urdf).read()}]
+    )
+    
+    # RViz visualization
+    rviz = Node(
+        package    = 'rviz2',
+        executable = 'rviz2',
+        name       = 'rviz2',
+        output     = 'screen',
+        arguments  = ['-d', os.path.join(this_directory, 'rviz/trajectory_tracking.rviz')]
+    )
+
+    return LaunchDescription([trajectory_tracking, relay, model, rviz])
+
