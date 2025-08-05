@@ -2,28 +2,28 @@
   ros__parameters:
     pose_names: ["up", "down", "left", "right", "fore", "aft", "round"] # We need to declare them here so we can search them by name
     up:
-        poses: [0.0, 0.0, 0.3, 0.0, 0.0, 0.0]
-        times: [3.0]
+        poses: [0.0, 0.0, 0.1, 0.0, 0.0, 0.0]
+        times: [10.0]
         reference: "relative"
     down:
-        poses: [0.0, 0.0, -0.3, 0.0, 0.0, 0.0]
-        times: [3.0]
+        poses: [0.0, 0.0, -0.1, 0.0, 0.0, 0.0]
+        times: [10.0]
         reference: "relative"
     left:
-        poses: [0.0, 0.3, 0.0, 0.0, 0.0, 0.0]
-        times: [3.0]
+        poses: [0.0, 0.1, 0.0, 0.0, 0.0, 0.0]
+        times: [10.0]
         reference: "relative"
     right:
-        poses: [0.0, -0.3, 0.0, 0.0, 0.0, 0.0]
-        times: [3.0]
+        poses: [0.0, -0.1, 0.0, 0.0, 0.0, 0.0]
+        times: [10.0]
         reference: "relative"
     fore:
         poses: [0.3, 0.0, 0.0, 0.0, 0.0, 0.0]
-        times: [3.0]
+        times: [10.0]
         reference: "relative"
     aft:
         poses: [-0.3, 0.0, 0.0, 0.0, 0.0, 0.0]
-        times: [3.0]
+        times: [10.0]
         reference: "relative"
     round:
         poses: [0.60, -0.25, 0.7, 0.0, 1.5708, 0.0,
