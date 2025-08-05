@@ -2,27 +2,27 @@
     ros__parameters:
 
         # These are for the RobotLibrary::Control class(es):
-        cartesian_damping: [100.0,   0.0,   0.0,  0.0,  0.0,  0.0,
-                              0.0, 100.0,   0.0,  0.0,  0.0,  0.0,
-                              0.0,   0.0, 100.0,  0.0,  0.0,  0.0,
-                              0.0,   0.0,   0.0, 50.0,  0.0,  0.0,
-                              0.0,   0.0,   0.0,  0.0, 50.0,  0.0,
-                              0.0,   0.0,   0.0,  0.0,  0.0, 50.0]
+        cartesian_velocity_gain: [20.0,   0.0,   0.0,  0.0,  0.0,  0.0,
+                                   0.0,  20.0,   0.0,  0.0,  0.0,  0.0,
+                                   0.0,   0.0,  20.0,  0.0,  0.0,  0.0,
+                                   0.0,   0.0,   0.0,  5.0,  0.0,  0.0,
+                                   0.0,   0.0,   0.0,  0.0,  5.0,  0.0,
+                                   0.0,   0.0,   0.0,  0.0,  0.0,  5.0]
 
-        cartesian_stiffness: [200.0,   0.0,   0.0,   0.0,   0.0,   0.0,
-                                0.0, 200.0,   0.0,   0.0,   0.0,   0.0,
-                                0.0,   0.0, 200.0,   0.0,   0.0,   0.0,
-                                0.0,   0.0,   0.0, 100.0,   0.0,   0.0,
-                                0.0,   0.0,   0.0,   0.0, 100.0,   0.0,
-                                0.0,   0.0,   0.0,   0.0,   0.0, 100.0]
+        cartesian_pose_gain: [100.0,   0.0,   0.0,   0.0,   0.0,    0.0,
+                                0.0, 100.0,   0.0,   0.0,   0.0,    0.0,
+                                0.0,   0.0, 100.0,   0.0,   0.0,    0.0,
+                                0.0,   0.0,   0.0,  20.0,   0.0,    0.0,
+                                0.0,   0.0,   0.0,   0.0,  20.0,    0.0,
+                                0.0,   0.0,   0.0,   0.0,   0.0,   20.0]
         frequency: 500.0
-        joint_position_gain: 100.0
-        joint_velocity_gain:  50.0
+        joint_position_gain: 200.0
+        joint_velocity_gain: 100.0
         manipulability_threshold: 0.001
-        max_joint_acceleration: 10.0
+        max_joint_acceleration: 20.0
 
         # This is for the underlying QPSolver class:
         initial_barrier_scalar: 500.0
-        barrier_reduction_rate: 0.001
+        barrier_reduction_rate: 0.01
         step_size_tolerance: 0.05
         max_steps: 10
