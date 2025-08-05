@@ -7,18 +7,19 @@
     <default class="iiwa">
       <material specular="0.5" shininess="0.25"/>
       <joint axis="0 0 1"/>
-      <!--general gaintype="fixed" biastype="affine" gainprm="2000" biasprm="0 -2000 -200"/-->
+      <general gaintype="fixed" biastype="affine" gainprm="2000" biasprm="0 -2000 -200"/> 
+      <!-- <general dyntype="none" gaintype="fixed" biastype="none" dynprm="1 0 0" gainprm="1 0 0" biasprm="0 0 0"/> -->
       <default class="joint1">
-        <joint range="-2.96706 2.96706"/>
-        <general ctrlrange="-2.96706 2.96706"/>
+        <joint type="hinge" range="-2.96706 2.96706" damping="10.0" />
+        <general ctrllimited="true" />
         <default class="joint2">
-          <joint range="-2.0944 2.0944"/>
-          <general ctrlrange="-2.0944 2.0944"/>
+          <joint type="hinge" range="-2.0944 2.0944" damping="10.0"/>
+          <general ctrllimited="true"/>
         </default>
       </default>
       <default class="joint3">
-        <joint range="-3.05433 3.05433"/>
-        <general ctrlrange="-3.05433 3.05433"/>
+        <joint type="hinge" range="-3.05433 3.05433" damping="10.0"/>
+        <general ctrllimited="true"/>
       </default>
       <default class="visual">
         <geom type="mesh" contype="0" conaffinity="0" group="2" material="gray"/>
@@ -159,13 +160,13 @@
   </contact>
 
     <actuator>
-      <motor name="actuator1" joint="joint1" gear="1" ctrlrange="-320 320"/>
-      <motor name="actuator2" joint="joint2" gear="1" ctrlrange="-320 320"/>
-      <motor name="actuator3" joint="joint3" gear="1" ctrlrange="-176 176"/>
-      <motor name="actuator4" joint="joint4" gear="1" ctrlrange="-176 176"/>
-      <motor name="actuator5" joint="joint5" gear="1" ctrlrange="-110 110"/>
-      <motor name="actuator6" joint="joint6" gear="1" ctrlrange="-40 40"/>
-      <motor name="actuator7" joint="joint7" gear="1" ctrlrange="-40 40"/>
+      <motor name="actuator1" joint="joint1" ctrlrange="-320 320"/>
+      <motor name="actuator2" joint="joint2" ctrlrange="-320 320"/>
+      <motor name="actuator3" joint="joint3" ctrlrange="-176 176"/>
+      <motor name="actuator4" joint="joint4" ctrlrange="-176 176"/>
+      <motor name="actuator5" joint="joint5" ctrlrange="-110 110"/>
+      <motor name="actuator6" joint="joint6" ctrlrange="-40 40"/>
+      <motor name="actuator7" joint="joint7" ctrlrange="-40 40"/>
     </actuator>
 
 
