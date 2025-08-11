@@ -1,10 +1,13 @@
-# :joystick: Kuka Velocity Control
+# 🎛️ Kuka Torque Control
 
-This package contains launch files for several nodes, action servers, and action clients to enable joint & Cartesian velocity control of the Kuka iiwa14 robot. It uses the [serial_link_action_client](https://github.com/Woolfrey/client_serial_link) package to send goals to the [serial_link_action_server](https://github/com/Woolfrey/server_serial_link). The latter implements [Robot Library](https://github.com/Woolfrey/software_robot_library) which is a C++ library for modeling & control. It can also interact with the [mujoco_ros2](https://github.com/Woolfrey/mujoco_ros2) package to for simulation.
+This packages conatins launch files for coordinating the [serial_link_action_client](https://github.com/Woolfrey/client_serial_link) and [serial_link_action_server](https://github.com/Woolfrey/server_serial_link) packages to control a model of the Kuka iiwa robot (or any serial link robot, really) in torque mode. It has been tested in conjunction with the [mujoco_ros2](https://github.com/Woolfrey/mujoco_ros2) package.
 
-In essence, it serves as an example of how to implement the [serial_link_action_client](https://github.com/Woolfrey/client_serial_link) package to send goals to the [serial_link_action_server](https://github/com/Woolfrey/server_serial_link) to control a robot arm, with all the necessary config files. You can copy and/or modify it to get it working for other robot arms :mechanical_arm:.
+It serves as an example of how to implement the [serial_link_action_client](https://github.com/Woolfrey/client_serial_link) package to send goals to the [serial_link_action_server](https://github/com/Woolfrey/server_serial_link) to control a robot arm, with all the necessary config files. You can copy and/or modify it to get it working for other robot arms :mechanical_arm:.
 
-:sparkles: Features:
+> [!WARNING]
+> Use this controller on a real robot at your own risk.
+
+✨ Features:
 - Joint & Cartesian trajectory tracking,
 - Real-time velocity control of the endpoint with a joystick,
 - Real-time control of endpoint pose with an interactive marker in RViz.
@@ -13,7 +16,7 @@ In essence, it serves as an example of how to implement the [serial_link_action_
   <img src="doc/interaction_diagram.png" width="1000" height="auto"/>
 </p>
 
-#### :compass: Navigation
+#### 🧭 Navigation
 - [Requirements](#clipboard-requirements)
 - [Installation](#floppy_disk-installation)
 - [Configuration Files](#gear-configuration-files)
@@ -30,13 +33,12 @@ In essence, it serves as an example of how to implement the [serial_link_action_
 - The [serial_link_action_server](https://github/com/Woolfrey/server_serial_link) package,
 - The [serial_link_action_client](https://github/com/Woolfrey/client_serial_link) package,
 - [Robot Library](https://github.com/Woolfrey/software_robot_library) (for the serial link action server),
-- The [mujoco_ros2](https://gitub.com/Woolfrey/mujoco_ros2) (optional),
-- [MuJoCo Menagerie](https://github.com/google-deepmind/mujoco_menagerie) (if using the mujoco_ros2 package),
+- The [mujoco_ros2](https://gitub.com/Woolfrey/mujoco_ros2) (optional).
 
 > [!NOTE]
 > This package was built and tested using Ubuntu 22.04, ROS2 Humble, and MuJoCo 3.2.0.
 
-[:top: Back to Top.](#joystick-kuka-velocity-control)
+[:top: Back to Top.](#%EF%B8%8F-kuka-torque-control)
 
 ## :floppy_disk: Installation
 
@@ -44,14 +46,13 @@ Your directory structure should end up looking something like this:
 ```
 workspace/
 ├── software_robot_library/
-├── mujoco_menagerie/
 └── ros2_ws/
     ├── build/
     ├── install/
     ├── log/
     └── src/
         ├── client_serial_link/
-        ├── control_kuka_velocity/
+        ├── control_kuka_torque/
         ├── interface_serial_link/
         ├── mujoco_ros2/
         └── server_serial_link/
@@ -59,20 +60,21 @@ workspace/
 
 Download and install all the necessary packages.
 
-[:top: Back to Top.](#joystick-kuka-velocity-control)
+[:top: Back to Top.](#%EF%B8%8F-kuka-torque-control)
 
 ## :gear: Configuration Files
 
-Inside the `config/` directory are all the configuration files to change parameters & performance of the controller:
-- `control_parameters.yaml` contains things like feedback gains used by the underlying `RobotLibrary::Control` classes.
-- `iiwa_endpoint_poses.yaml` specifies waypoints for Cartesian trajectories, which is loaded by the `trajectory_tracking_client` node.
-- `iiwa_joint_configurations.yaml` specifies waypoints for joint trajectories, loaded by the `TrackJointTrajectory` action client.
-- `tolerances.yaml` contains maximum permissable errors for things like trajectory tracking, etc. The action server aborts if they are violated.
-- `wii_nunchuck.yaml` specifies how to convert joystick inputs to Cartesian velocities used in the `joy_twist_mapper` node.
+There are several configuration files that you can modify to your liking:
 
-Play around with them and see how it works.
+| File | Purpose |
+|------|---------|
+| `control_parameters`        | Variables that influence control performance, such as feedback gains, singularity avoidance, etc.
+| `iiwa_endpoint_poses`       | Specifies named Cartesian wayposes that are use to generate Cartesian trajectories. |
+| `iiwa_joint_configurations` | Pre-determined joint configurations that are used to generate joint trajectories. |
+| `tolerances`                | Tracking errors for the controller. The actions server will abort if these tolerances are violated. |
+| `wii_nunchuck`              | Button mappings for a joystick when using the `joy_twist_mapper` node. |
 
-[:top: Back to Top.](#joystick-kuka-velocity-control)
+[:top: Back to Top.](#%EF%B8%8F-kuka-torque-control)
 
 ## :rocket: Launch Files
 
@@ -81,21 +83,19 @@ Play around with them and see how it works.
 
 ### mujoco.py
 
-If you don't have a real robot, you can use this MuJoCo simulation. Inside the `launch/mujoco.py` you need to specify the `xmlScenePath` where the model is located:
+If you don't have a real robot, you can use [this MuJoCo simulation](https://github.com/Woolfrey/mujoco_ros2/). All the necessary model files are located in the `mujoco/` directory.
 
-```
-xmlScenePath = "/home/<username>/workspace/mujoco_menagerie/kuka_iiwa_14/scene.xml"
-```
-
-Open a terminal, and run `ros2 launch kuka_velocity_control mujoco.py` and it should start. You should also see the joint states being published, and the joint command topic ready to control the robot:
+Open a terminal, and run `ros2 launch kuka_torque_control mujoco.py` and it should start. You should also see the joint states being published, and the joint command topic ready to control the robot. You should see information specifying that it is running in torque mode:
 
 <p align = "center">
   <img src="doc/mujoco_ros2.png" width="600" height="auto"/>
 </p>
 
-### launch_follow_transform.sh
+### Following a Transform
 
-Inside the `control_kuka_velocity/` directory, type:
+This action server lets you follow a Cartesian transform using real-time feedback control.
+
+Inside the `control_kuka_torque/` directory, type:
 ```
 ./launch_follow_transform.sh
 ```
@@ -112,9 +112,11 @@ You should be able to drag around the interactive marker and the robot will auto
   <img src="doc/follow_transform.gif" width="600" height="auto"/>
 </p>
 
-### launch_follow_twist.sh
+### Following a Twist (Velocity) Command
 
-Inside the `control_kuka_velocity/` directory, type:
+This action lets you direct the endpoint of the robot in real time with a velocity command. You can connect a joystick and manually control the robot.
+
+Inside the `control_kuka_torque/` directory, type:
 ```
 ./launch_follow_twist.sh
 ```
@@ -132,9 +134,11 @@ You can change the joystick mapping in the `config/wii_nunchuck.yaml` file.
   <img src="doc/follow_twist.gif" width="600" height="auto"/>
 </p>
 
-### launch_trajectory_tracking.sh
+### Joint & Cartesian Trajectory Tracking
 
-From the `control_kuka_velocity/` directory type this in to a terminal:
+This action server lets you generate joint and Cartesian trajectories to follow.
+
+From the `control_kuka_torque/` directory type this in to a terminal:
 
 ```
 ./launch_track_trajectory.sh
@@ -150,7 +154,7 @@ Type `options` to see what is available.
   <img src="doc/track_trajectory.gif" width="600" height="auto"/>
 </p>
 
-[:top: Back to Top.](#joystick-kuka-velocity-control)
+[:top: Back to Top.](#%EF%B8%8F-kuka-torque-control)
 
 ## :handshake: Contributing
 
@@ -159,9 +163,9 @@ Contributions to this repositore are welcome! Feel free to:
 2. Implement your changes / improvements, then
 3. Issue a pull request.
 
-If you're looking for ideas, you can always check the [Issues tab](https://github.com/Woolfrey/control_kuka_velocity/issues) for those with :raising_hand: [OPEN]. These are things I'd like to implement, but don't have time for. It'd be much appreciated, and you'll be tagged as a contributor :sunglasses:
+If you're looking for ideas, you can always check the [Issues tab](https://github.com/Woolfrey/control_kuka_torque/issues) for those with :raising_hand: [OPEN]. These are things I'd like to implement, but don't have time for. It'd be much appreciated, and you'll be tagged as a contributor :sunglasses:
 
-[:top: Back to Top.](#joystick-kuka-velocity-control)
+[:top: Back to Top.](#%EF%B8%8F-kuka-torque-control)
 
 ## :bookmark_tabs: Citing this Repository
 
@@ -169,10 +173,10 @@ If you find this code useful, spread the word by acknowledging it. Click on `Cit
 
 Here's a BibTeX reference:
 ```
-@software{woolfrey_kuka_velocity_control_2025,
+@software{woolfrey_kuka_torque_control_2025,
      author  = {Woolfrey, Jon},
      month   = apr,
-     title   = {{K}uka {V}elocity {C}ontrol},
+     title   = {{K}uka {T}orque {C}ontrol},
      url     = {https://github.com/Woolfrey/control_kuka_velocity},
      version = {1.0.0},
      year    = {2025}
@@ -180,13 +184,13 @@ Here's a BibTeX reference:
 ```
 Here's the automatically generated APA format:
 ```
-Woolfrey, J. (2025). Kuka Velocity Control (Version 1.0.0). Retrieved from https://github.com/Woolfrey/control_kuka_velocity
+Woolfrey, J. (2025). Kuka Torque Control (Version 1.0.0). Retrieved from https://github.com/Woolfrey/control_kuka_torque
 ```
 
-[:top: Back to Top.](#joystick-kuka-velocity-control)
+[:top: Back to Top.](#%EF%B8%8F-kuka-torque-control)
 
 ## :scroll: License
 
 This software package is licensed under the [GNU General Public License v3.0 (GPL-3.0)](https://choosealicense.com/licenses/gpl-3.0/). You are free to use, modify, and distribute this package, provided that any modified versions also comply with the GPL-3.0 license. All modified versions must make the source code available and be licensed under GPL-3.0. The license also ensures that the software remains free and prohibits the use of proprietary restrictions such as Digital Rights Management (DRM) and patent claims. For more details, please refer to the [full license text](LICENSE).
 
-[:top: Back to Top.](#joystick-kuka-velocity-control)
+[:top: Back to Top.](#%EF%B8%8F-kuka-torque-control)
