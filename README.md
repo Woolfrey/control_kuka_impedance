@@ -1,6 +1,6 @@
-# 🎛️ Kuka Torque Control
+# 🎛️ Kuka Impedance Control
 
-This packages conatins launch files for coordinating the [serial_link_action_client](https://github.com/Woolfrey/client_serial_link) and [serial_link_action_server](https://github.com/Woolfrey/server_serial_link) packages to control a model of the Kuka iiwa robot (or any serial link robot, really) in torque mode. It has been tested in conjunction with the [mujoco_ros2](https://github.com/Woolfrey/mujoco_ros2) package.
+This packages conatins launch files for coordinating the [serial_link_action_client](https://github.com/Woolfrey/client_serial_link) and [serial_link_action_server](https://github.com/Woolfrey/server_serial_link) packages to control a model of the Kuka iiwa robot (or any serial link robot, really) with impedance control. It has been tested in conjunction with the [mujoco_ros2](https://github.com/Woolfrey/mujoco_ros2) package.
 
 It serves as an example of how to implement the [serial_link_action_client](https://github.com/Woolfrey/client_serial_link) package to send goals to the [serial_link_action_server](https://github/com/Woolfrey/server_serial_link) to control a robot arm, with all the necessary config files. You can copy and/or modify it to get it working for other robot arms :mechanical_arm:.
 
