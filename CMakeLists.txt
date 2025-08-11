@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(kuka_torque_control)
+project(kuka_impedance_control)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

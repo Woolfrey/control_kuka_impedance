@@ -3,7 +3,7 @@
 <package format="3">
 
    <!-- Package information: -->
-   <name>kuka_torque_control</name>
+   <name>kuka_impedance_control</name>
    <version>0.0.0</version>
    <description>Configuration and launch files for the kuka robot to run the serial_link_action_server package.</description>
    <maintainer email="jonathan.woolfrey@gmail.com">Woolfrey</maintainer>
