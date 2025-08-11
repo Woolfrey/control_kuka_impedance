@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Get install paths using ros2 pkg prefix
-PKG_PREFIX=$(ros2 pkg prefix kuka_velocity_control)
-CONFIG_DIR="${PKG_PREFIX}/share/kuka_velocity_control/config"
+PKG_PREFIX=$(ros2 pkg prefix kuka_impedance_control)
+CONFIG_DIR="${PKG_PREFIX}/share/kuka_impedance_control/config"
 
 # Open a new terminal and run the action server
-gnome-terminal -- bash -c "ros2 launch kuka_velocity_control follow_transform.py; exec bash"
+gnome-terminal -- bash -c "ros2 launch kuka_impedance_control follow_transform.py; exec bash"
 
 # Wait for the server to start
 sleep 1
