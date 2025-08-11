@@ -20,7 +20,7 @@ def generate_launch_description():
                      'link7',                                                                       # Endpoint name
                      'joint_command_relay',                                                         # Topic to publish joint commands to
                      'joint_states',                                                                # Joint state topic to subscribe to
-                     'TORQUE']                                                                      # Specifies control mode
+                     'IMPEDANCE']                                                                   # Specifies control mode
     )
 
     # Joint command relay
