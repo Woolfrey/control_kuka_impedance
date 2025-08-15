@@ -1,17 +1,17 @@
 <a id="top"></a>
-# 🎛️ Serial Link Velocity Control
+# 🎛️ Serial Link Impedance Control
 
-This repository contains a ROS2 package with various configuration & launch files for controlling serial link robot arms in velocity mode. It is an extension of the [Kuka velocity control package](https://github.com/Woolfrey/control_kuka_velocity) that now enables multiple models:
+This repository contains a ROS2 package with various configuration & launch files for controlling serial link robot arms with joint and Cartesian impedance control. It has several models provided:
 - The Kuka iiwa14,
-- The Franka Panda,
-- The Rethink Robotics Sawyer, and
-- The Universal Robot UR10.
+- The Franka Panda, and
+- The Rethink Robotics Sawyer
+
+but you can use it on any serial link robot provided you have the URDF file.
 
 <p align="center"/>
   <img src="/doc/kuka.gif" width="150" height="auto"/>
   <img src="/doc/panda.gif" width="150" height="auto"/>
   <img src="/doc/sawyer.gif" width="150" height="auto"/>
-  <img src="/doc/ur10e.gif" width="150" height="auto"/>
 </p>
 
 It uses the [serial_link_action_client](https://github.com/Woolfrey/client_serial_link) to send goals to the [serial_link_action_server](https://github.com/Woolfrey/server_serial_link). The latter implements [RobotLibrary](https://github.com/Woolfrey/software_robot_library) for the real-time control algorithms. It is designed to interact with the [mujoco_ros2](https://github.com/Woolfrey/mujoco_ros2) package for simulation, but you can easily swap this out for a real robot provided you establish the correct communication channels.
@@ -19,10 +19,14 @@ It uses the [serial_link_action_client](https://github.com/Woolfrey/client_seria
 This package primarily serves as an example of how to implement the [serial_link_action_client](https://github.com/Woolfrey/client_serial_link) and [serial_link_action_server](https://github.com/Woolfrey/server_serial_link) packages to control a robot arm. You can fork it, and modify it, to get it running for any other robot arm, provided you have a valid URDF 🦾
 
 :sparkles: Features include:
-- Joint & Cartesian trajectory tracking,
-- Real-time velocity control of the endpoint with a joystick,
+- Joint & Cartesian impedance control,
+- Real-time trajectory tracking,
+- Real-time control of the endpoint with a joystick,
 - Real-time control of the endpoint with an interactive marker in RViz,
 - Configuration files to rapidly change preset joint positions, endpoint poses, etc.
+
+> [!NOTE]
+> This package implements the `SerialLinkImpedance` control class from [RobotLibrary](https://github.com/Woolfrey/software_robot_library) which **does not** utilize inertia. This is done deliberately because many robot models have very poor dynamic modeling.
 
 The diagram below shows how all the components interact:
 
@@ -49,10 +53,9 @@ The diagram below shows how all the components interact:
 - The [serial link interfaces](https://github.com/Woolfrey/interface_serial_link) package,
 - The [serial_link_action_server](https://github/com/Woolfrey/server_serial_link) package,
 - The [serial_link_action_client](https://github/com/Woolfrey/client_serial_link) package,
-- [Robot Library](https://github.com/Woolfrey/software_robot_library) (for the serial link action server),
-- The [mujoco_ros2](https://gitub.com/Woolfrey/mujoco_ros2) (optional),
-- [MuJoCo Menagerie](https://github.com/google-deepmind/mujoco_menagerie) (if using the mujoco_ros2 package),
-
+- [Robot Library](https://github.com/Woolfrey/software_robot_library) (for the serial link action server), and
+- The [mujoco_ros2](https://gitub.com/Woolfrey/mujoco_ros2) (optional).
+- 
 [:top: Back to Top.](#top)
 
 ## :floppy_disk: Installation
@@ -62,14 +65,13 @@ Download and install all the necessary packages listed above. Your directory str
 ```
 workspace/
 ├── software_robot_library/
-├── mujoco_menagerie/
 └── ros2_ws/
     ├── build/
     ├── install/
     ├── log/
     └── src/
         ├── client_serial_link/
-        ├── control_serial_link_velocity/
+        ├── control_serial_link_impedance/
         ├── interface_serial_link/
         ├── mujoco_ros2/ (optional)
         └── server_serial_link/
@@ -105,9 +107,8 @@ There are 3 bash script you can run. From the `control_serial_link_velocity/` di
 
 `<robot_model>` is an argument that is either:
 - `iiwa14`,
-- `panda`,
-- `sawyer`, or
-- `ur10e`.
+- `panda`, or
+- `sawyer`.
 
 The client will launch in your current terminal. Another terminal will open up for the action server.
 
@@ -120,14 +121,13 @@ The client will launch in your current terminal. Another terminal will open up f
 If you don't have a real robot, you can use this [MuJoCo simulation](https://github.com/Woolfrey/mujoco_ros2). Inside the `launch/mujoco.py` file you need to specify where MuJoCo Menagerie is located:
 
 ```
-    mujoco_menagerie_directory = "directory/for/mujoco_menagerie"
+mujoco_menagerie_directory = "directory/for/mujoco_menagerie"
 ```
 
 Open a terminal, and run `ros2 launch serial_link_velocity_control mujoco.py model:=<model_name>` and it should start. Again, the options for `<model_name>` are:
 - `iiwa14`,
-- `panda`,
-- `sawyer`, or
-- `ur10e`
+- `panda`, or
+- `sawyer`.
 
 You should also see the joint states being published, and the joint command topic ready to control the robot:
 
@@ -137,7 +137,7 @@ You should also see the joint states being published, and the joint command topi
 
 ### Following a Transform
 
-This action server solves the real-time Cartesian velocity control to enable the robot to follow a desired `tf2:transform`. It uses an interactive marker within Rviz, from the `serial_link_interfaces` repository which as the `interactive_marker` node. But you can set up the action server to follow any transform, such as following an object in real time.
+This action server solves the real-time Cartesian impedance control to enable the robot to follow a desired `tf2:transform`. It uses an interactive marker within Rviz, from the `serial_link_interfaces` repository which as the `interactive_marker` node. But you can set up the action server to follow any transform, such as following an object in real time.
 
 You run it with:
 ```
@@ -209,15 +209,21 @@ If you're looking for ideas, you can always check the [Issues tab](https://githu
 
 If you find this code useful, spread the word by acknowledging it. Click on `Cite this repository` under the **About** section in the top-right corner of this page :arrow_upper_right:.
 
+Here's an APA reference:
+```
+Woolfrey, J. (2025, August 15). *Serial link impedance control* (Version 2.0.0) [Computer software]. GitHub. https://github.com/Woolfrey/control_serial_link_impedance
+```
+
 Here's a BibTeX reference:
 ```
-@software{woolfrey_kuka_velocity_control_2025,
-     author  = {Woolfrey, Jon},
-     month   = june,
-     title   = {{S}erial {L}ink {V}elocity {C}ontrol},
-     url     = {https://github.com/Woolfrey/control_serial_link_velocity},
-     version = {1.0.0},
-     year    = {2025}
+@misc{woolfrey_serial_link_impedance_control_2025,
+  author       = {Woolfrey, Jon},
+  title        = {Serial Link Impedance Control},
+  year         = {2025},
+  month        = {aug},
+  note         = {Version 2.0.0},
+  url          = {https://github.com/Woolfrey/control_serial_link_impedance},
+  howpublished = {\url{https://github.com/Woolfrey/control_serial_link_impedance}},
 }
 ```
 
