@@ -1,4 +1,7 @@
 <?xml version="1.0" ?>
+<!-- This URDF was generated from an XML file in the MuJoCo Menagerie project. -->
+<!-- See: https://github.com/google-deepmind/mujoco_menagerie -->
+<!-- WARNING: Physical parameters are NOT accurate. Use on a real robot at your own risk. -->
 <robot name="panda">
    <link name="world">
       <inertial>
