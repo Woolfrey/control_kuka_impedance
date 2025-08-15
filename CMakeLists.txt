@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(kuka_impedance_control)
+project(serial_link_impedance_control)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -9,13 +9,22 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-# ROS2 packages
+####################################################################################################
+#                                          DEPENDENCIES                                            #
+####################################################################################################
+
+# ROS2 packages:
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(serial_link_action_client REQUIRED)
 find_package(serial_link_action_server REQUIRED)
 find_package(serial_link_interfaces REQUIRED)
 find_package(std_msgs REQUIRED)
+
+
+####################################################################################################
+#                                           EXECUTABLES                                            #
+####################################################################################################
 
 # Joint command relay
 add_executable(joint_command_relay src/joint_command_relay.cpp)
@@ -25,17 +34,20 @@ ament_target_dependencies(joint_command_relay "ament_cmake"
                                               "serial_link_interfaces"
                                               "std_msgs")                                              
 
-# Installation executable(s)
+####################################################################################################
+#                                          INSTALLATION                                            #
+####################################################################################################
+# Install executables
 install(TARGETS joint_command_relay
         DESTINATION lib/${PROJECT_NAME}
 )
 
 # Install folders so ROS2 can find relevant files
-install(DIRECTORY launch
-                  config
+install(DIRECTORY config
+                  launch
                   mujoco
-                  urdf
                   rviz
+                  urdf
         DESTINATION share/${PROJECT_NAME}
 )
 
