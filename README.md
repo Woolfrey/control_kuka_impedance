@@ -51,8 +51,8 @@ The diagram below shows how all the components interact:
 - [Ubuntu 22.04](https://ubuntu.com/blog/tag/22-04-lts), or later,
 - [ROS2 Humble](https://docs.ros.org/en/humble/index.html), or later, the
 - The [serial link interfaces](https://github.com/Woolfrey/interface_serial_link) package,
-- The [serial_link_action_server](https://github/com/Woolfrey/server_serial_link) package,
-- The [serial_link_action_client](https://github/com/Woolfrey/client_serial_link) package,
+- The [serial_link_action_server](https://github.com/Woolfrey/server_serial_link) package,
+- The [serial_link_action_client](https://github.com/Woolfrey/client_serial_link) package,
 - [Robot Library](https://github.com/Woolfrey/software_robot_library) (for the serial link action server), and
 - The [mujoco_ros2](https://gitub.com/Woolfrey/mujoco_ros2) (optional).
 - 
